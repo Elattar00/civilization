@@ -49,7 +49,7 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 24px; /* Align with icons on mobile */
+            left: 31px; /* Mobile: Centered at 32px (32px - 1.5px width) */
             width: 3px;
             background: #cbd5e1;
             border-radius: 99px;
@@ -134,7 +134,6 @@
                 </div>
             </div>
             
-            <!-- Mobile-Optimized Placeholder for future controls or simple spacing -->
             <div class="flex items-center gap-4">
                 <!-- Focus Mode Removed -->
             </div>
@@ -162,7 +161,7 @@
         <!-- PART 1: TIMELINE VIEW -->
         <div id="timeline-view" class="timeline-line relative pb-32 block">
             
-            <!-- Timeline Legend (Added Back) -->
+            <!-- Timeline Legend -->
             <div class="flex justify-center gap-3 mb-12 relative z-10 flex-wrap px-4">
                 <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-bold uppercase tracking-wider shadow-sm"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Industry</span>
                 <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 text-red-600 border border-red-100 text-[10px] font-bold uppercase tracking-wider shadow-sm"><span class="w-2 h-2 rounded-full bg-red-500"></span> Empire</span>
@@ -176,7 +175,8 @@
                     <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Century of Change &<br>The Gunpowder Era</h3>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                <!-- Fixed Icon Positioning: left-8 top-8 for mobile, centered for desktop -->
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-hourglass-start text-xl"></i>
                 </div>
 
@@ -281,7 +281,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-globe-americas text-xl"></i>
                 </div>
 
@@ -298,7 +298,7 @@
                     <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">The Raj &<br>Imperial Growth</h3>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-crown text-xl"></i>
                 </div>
 
@@ -410,7 +410,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-handshake text-xl"></i>
                 </div>
 
@@ -427,7 +427,7 @@
                     <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">The Industrial<br>Revolution</h3>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-industry text-xl"></i>
                 </div>
 
@@ -528,7 +528,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-city text-xl"></i>
                 </div>
 
@@ -545,7 +545,7 @@
                     <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Social & Cultural<br>Impact</h3>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-users text-xl"></i>
                 </div>
 
@@ -632,7 +632,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                <div class="absolute left-8 top-8 -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2 transform flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
                     <i class="fas fa-feather-alt text-xl"></i>
                 </div>
 
