@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Modern British History: Elattar</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'history-blue': '#3b82f6', 
+                        'history-red': '#ef4444',  
+                        'history-green': '#22c55e', 
+                        'history-purple': '#8b5cf6',
+                        'history-gold': '#f59e0b',
+                        'slate-850': '#1e293b',
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -15px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(59, 130, 246, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Timeline Vertical Line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px; /* Align with icons on mobile */
+            width: 3px;
+            background: #cbd5e1;
+            border-radius: 99px;
+            z-index: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .timeline-line::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        
+        .card-content {
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+        }
+
+        /* Card Hover Lift */
+        .card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* List Styles for Memorization */
+        .mem-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .mem-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        /* Tab Active State */
+        .tab-active {
+            background-color: #1e293b; /* slate-900 */
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tab-inactive {
+            background-color: white;
+            color: #64748b; /* slate-500 */
+        }
+        .tab-inactive:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+    </style>
+</head>
+<body class="text-slate-600 font-sans antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-900 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-landmark text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold text-slate-900 leading-none tracking-tight">Modern British History</h1>
+                    <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold -mt-0.5 ml-0.5">Elattar</p>
+                </div>
+            </div>
+            
+            <!-- Mobile-Optimized Placeholder for future controls or simple spacing -->
+            <div class="flex items-center gap-4">
+                <!-- Focus Mode Removed -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 md:px-8 relative">
+
+        <!-- View Switcher -->
+        <div class="flex justify-center mb-8 overflow-x-auto">
+            <div class="bg-slate-100 p-1.5 rounded-full flex gap-2 shadow-inner whitespace-nowrap">
+                <button onclick="switchView('timeline')" id="btn-timeline" class="tab-active px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wide transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-stream"></i> Part 1: Timeline
+                </button>
+                <button onclick="switchView('themes')" id="btn-themes" class="tab-inactive px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wide transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-layer-group"></i> Part 2: Themes
+                </button>
+                <button onclick="switchView('qa')" id="btn-qa" class="tab-inactive px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-wide transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-question-circle"></i> Part 3: Q&A
+                </button>
+            </div>
+        </div>
+        
+        <!-- PART 1: TIMELINE VIEW -->
+        <div id="timeline-view" class="timeline-line relative pb-32 block">
+            
+            <!-- Timeline Legend (Added Back) -->
+            <div class="flex justify-center gap-3 mb-12 relative z-10 flex-wrap px-4">
+                <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-bold uppercase tracking-wider shadow-sm"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Industry</span>
+                <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 text-red-600 border border-red-100 text-[10px] font-bold uppercase tracking-wider shadow-sm"><span class="w-2 h-2 rounded-full bg-red-500"></span> Empire</span>
+                <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-600 border border-green-100 text-[10px] font-bold uppercase tracking-wider shadow-sm"><span class="w-2 h-2 rounded-full bg-green-500"></span> Society</span>
+            </div>
+
+            <!-- Card 1: 19th Century & Gunpowder Empires -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="hidden md:block text-right">
+                    <span class="text-green-600 font-bold text-xs uppercase tracking-widest mb-2 block">Context</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Century of Change &<br>The Gunpowder Era</h3>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-hourglass-start text-xl"></i>
+                </div>
+
+                <div class="pl-20 md:pl-0">
+                    <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Century of Change</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Overview & The Islamic Empires
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-green-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-green-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <strong class="text-slate-900 block mb-2 uppercase text-xs tracking-widest">Definition of the Century</strong>
+                                    Starts: <strong>January 1, 1801</strong><br>
+                                    Ends: <strong>December 31, 1900</strong>
+                                </div>
+
+                                <div class="mb-8 pl-4 border-l-4 border-green-200">
+                                    <strong class="text-green-800 block mb-2 text-xl">Early 19th Century Change</strong>
+                                    <ul class="space-y-2">
+                                        <li><strong>Slavery was abolished.</strong></li>
+                                        <li>The <strong>First and Second Industrial Revolutions</strong> (overlapping with 18th & 20th centuries) triggered massive urbanization.</li>
+                                        <li>Resulted in higher levels of <strong>productivity, profit, and prosperity.</strong></li>
+                                    </ul>
+                                </div>
+
+                                <h4 class="font-bold text-slate-900 mt-8 mb-4 text-xl border-b border-slate-100 pb-2">The Gunpowder Empires (16th–18th C.)</h4>
+                                <p class="mb-4">Also known as the "Era of Islamic Gunpowder Empires," referring to the <strong>Ottoman</strong>, <strong>Safavid</strong>, and <strong>Mughal</strong> empires.</p>
+                                
+                                <ul class="mem-list space-y-3 mb-6 marker:text-green-500">
+                                    <li>Among the strongest, most stable economies of the early modern period.</li>
+                                    <li>Led to commercial expansion and patronage of <strong>culture, art, and architecture.</strong></li>
+                                    <li>Saw rising per capita income, population growth, and technological innovation.</li>
+                                </ul>
+
+                                <p class="text-sm bg-green-50 p-4 rounded-xl border border-green-100 text-green-900">
+                                    <strong>Geography:</strong> Centralized from Europe/North Africa in the West to Bangladesh/Myanmar in the East.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Shifting Global Powers -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="pl-20 md:pl-0 md:order-1">
+                     <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Shifting Global Powers</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    Collapse & New Influence
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-red-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <p class="mb-6">The Islamic Gunpowder Empires were formally dissolved as <strong>European imperialism</strong> swept in, bringing South Asia, Southeast Asia, and nearly all of Africa under colonial rule.</p>
+                                
+                                <div class="mb-6 p-5 bg-red-50 rounded-xl border border-red-100">
+                                    <strong class="text-red-900 block mb-3 font-extrabold text-xl">The Great Collapse</strong>
+                                    <p class="mb-2">This era was marked by the collapse of major powers:</p>
+                                    <ul class="mem-list space-y-1 font-medium">
+                                        <li>Spanish Empire</li>
+                                        <li>Zulu Kingdom</li>
+                                        <li>First French Empire</li>
+                                        <li>Holy Roman Empire</li>
+                                        <li>Mughal Empire</li>
+                                    </ul>
+                                </div>
+
+                                <p class="mb-4 font-bold text-slate-900">This paved the way for the growing influence of:</p>
+                                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-8 text-sm">
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> British Empire</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Russian Empire</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> United States</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> German Empire</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Second French Empire</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Kingdom of Italy</li>
+                                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> British Habsburgs</li>
+                                </ul>
+
+                                <div class="pl-4 border-l-4 border-slate-300">
+                                    <strong class="text-slate-900 block mb-1">Post-Napoleonic Expansion</strong>
+                                    After defeating the French Empire and its Indian allies, the <strong>British</strong> and <strong>Russian</strong> empires became the world's leading powers. Russia expanded into the Caucasus, Central Asia, and the Far East.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-globe-americas text-xl"></i>
+                </div>
+
+                <div class="hidden md:block text-left md:order-2">
+                     <span class="text-red-600 font-bold text-xs uppercase tracking-widest mb-2 block">Geopolitics</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Shifting<br>Global Powers</h3>
+                </div>
+            </div>
+
+            <!-- Card 3: The British Raj -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="hidden md:block text-right">
+                    <span class="text-red-600 font-bold text-xs uppercase tracking-widest mb-2 block">India & Africa</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">The Raj &<br>Imperial Growth</h3>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-crown text-xl"></i>
+                </div>
+
+                <div class="pl-20 md:pl-0">
+                    <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">The Raj & Growth</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    1857 Rebellion to Global Dominance
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-red-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <h4 class="font-bold text-red-800 mb-4 text-xl">Decline of Indian Powers</h4>
+                                <p class="mb-4">Remaining powers in the Indian subcontinent suffered massive decline. This included:</p>
+                                <ul class="mem-list space-y-2 mb-6">
+                                    <li><strong>Kingdom of Mysore and its French allies</strong></li>
+                                    <li>Nawabs of Bengal</li>
+                                    <li>Maratha Empire</li>
+                                    <li>Sikh Empire</li>
+                                    <li>Princely states of the Nizam of Hyderabad</li>
+                                </ul>
+
+                                <div class="bg-red-50 p-5 rounded-2xl mb-6 border border-red-100">
+                                    <strong class="text-red-900 block mb-2 text-xl"><i class="fas fa-fire mr-2"></i>The Turning Point (1857)</strong>
+                                    Dissatisfaction with the <strong>British East India Company’s</strong> rule caused the <strong>Indian Rebellion of 1857</strong>.
+                                    <br><br>
+                                    <span class="block pl-4 border-l-2 border-red-300 italic">Result: Marked the Company's dissolution. India was ruled directly by the British Crown (The <strong>British Raj</strong>).</span>
+                                </div>
+
+                                <h4 class="font-bold text-red-800 mb-4 text-xl">Rapid Imperial Expansion</h4>
+                                <ul class="mem-list space-y-3 mb-6">
+                                    <li><strong>First half of the century:</strong> Rapid growth in Canada, Australia, South Africa, and heavily populated India.</li>
+                                    <li><strong>Last two decades:</strong> Rapid expansion in Africa.</li>
+                                </ul>
+                                
+                                <p class="text-sm bg-slate-50 p-4 rounded-xl text-slate-600 font-medium">
+                                    By the century's end, Britain controlled <strong>1/5th</strong> of the world’s land and <strong>1/4th</strong> of its population.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Pax Britannica -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="pl-20 md:pl-0 md:order-1">
+                     <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Pax Britannica</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    "British Peace" (1815-1914)
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-red-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-red-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <p class="mb-4">Latin for "British Peace," spanning from <strong>1815 (End of Napoleonic Wars)</strong> to <strong>1914 (Start of WWI)</strong>.</p>
+                                
+                                <div class="mb-6 p-4 bg-red-50 rounded-xl border-l-4 border-red-400 text-red-900 italic font-medium">
+                                    It ushered in an <strong>unprecedented globalization and economic integration on a massive scale</strong>.
+                                </div>
+
+                                <h4 class="font-bold text-slate-900 text-xl mb-4 pb-2 border-b border-slate-100">What Defined It?</h4>
+                                <ul class="space-y-4 mb-8">
+                                    <li class="pl-4 border-l-4 border-red-200">
+                                        <strong class="text-red-800 block">British Naval Supremacy</strong> The Royal Navy was unmatched, controlling sea routes and suppressing piracy and the slave trade.
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-red-200">
+                                        <strong class="text-red-800 block">Global Trade Expansion</strong> Britain promoted free trade, built global markets, and established London as a financial center.
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-red-200">
+                                        <strong class="text-red-800 block">Colonial Expansion</strong> The empire became the largest in history, expanding dramatically in Africa and Asia.
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-red-200">
+                                        <strong class="text-red-800 block">Diplomatic Influence</strong> Britain acted as a global mediator to prevent major European wars.
+                                    </li>
+                                </ul>
+
+                                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                    <div class="bg-slate-50 p-4 rounded-xl">
+                                        <strong class="text-slate-900 block mb-2 text-sm uppercase tracking-wide">Economic Growth</strong>
+                                        Fueled by the Industrial Revolution. Britain exported capital, technology, and goods. Railways, telegraphs, and steamships connected the empire.
+                                    </div>
+                                    <div class="bg-slate-50 p-4 rounded-xl">
+                                        <strong class="text-slate-900 block mb-2 text-sm uppercase tracking-wide">Political & Cultural</strong>
+                                        British legal, political, and educational systems spread. English became a global language. Global norms in trade and diplomacy were influenced.
+                                    </div>
+                                </div>
+
+                                <div class="bg-red-50/50 p-5 rounded-xl border border-red-100">
+                                    <strong class="text-red-900 block mb-2">Limits & The End</strong>
+                                    Peace was enforced by control, not agreement. Colonial conflicts were frequent (exploitation/cultural suppression). The era ended with the rise of Germany, the US, and Japan, culminating in WWI (1914).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-red-500 border-4 border-red-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-handshake text-xl"></i>
+                </div>
+
+                <div class="hidden md:block text-left md:order-2">
+                     <span class="text-red-600 font-bold text-xs uppercase tracking-widest mb-2 block">Stability</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Pax<br>Britannica</h3>
+                </div>
+            </div>
+
+            <!-- Card 5: Industrial Revolution -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="hidden md:block text-right">
+                    <span class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-2 block">Economy</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">The Industrial<br>Revolution</h3>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-industry text-xl"></i>
+                </div>
+
+                <div class="pl-20 md:pl-0">
+                    <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Industrial Revolution</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    Origins, Drivers & Transformation
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-blue-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <p class="mb-6">Begun in England (late 18th C) and accelerating through the 19th C, this made Britain the world's first industrialized nation.</p>
+
+                                <div class="mb-8 bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
+                                    <strong class="text-blue-900 block mb-3 text-xl">Key Drivers</strong>
+                                    <ul class="mem-list space-y-2 marker:text-blue-500">
+                                        <li>Abundant coal and iron resources.</li>
+                                        <li>Stable political system & expanding empire.</li>
+                                        <li><strong>Tech Innovations:</strong> Steam engine (James Watt), spinning jenny, power loom.</li>
+                                        <li>Growth of capitalist enterprise & banking.</li>
+                                    </ul>
+                                </div>
+
+                                <h4 class="font-bold text-slate-900 mb-4 text-xl">Economic Transformation</h4>
+                                <ul class="space-y-4">
+                                    <li class="pl-4 border-l-4 border-slate-200">
+                                        <strong class="text-slate-900 block">Textiles</strong> Shifted from cottage industries to mechanized factories (Manchester, Leeds).
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-slate-200">
+                                        <strong class="text-slate-900 block">Iron & Steel</strong> Production surged, fueling construction and railways.
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-slate-200">
+                                        <strong class="text-slate-900 block">Transport</strong> Revolution in canals, railways, and steamships connected markets and reduced costs.
+                                    </li>
+                                    <li class="pl-4 border-l-4 border-slate-200">
+                                        <strong class="text-slate-900 block">Agriculture</strong> Enclosure Acts and mechanization displaced rural workers, pushing them to cities.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Urbanization -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="pl-20 md:pl-0 md:order-1">
+                     <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Urbanization</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    Population & Living Conditions
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-blue-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <h4 class="font-bold text-blue-800 mb-3 text-xl">Population Explosion</h4>
+                                <p class="mb-4">Between 1801 and 1901, England’s population exploded from <strong>9 million to over 30 million</strong>. Rural populations migrated to cities like Liverpool and Birmingham for factory work.</p>
+                                
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-center">
+                                        <span class="block text-xs uppercase text-slate-400 font-bold mb-1">London</span>
+                                        <span class="text-slate-900 font-extrabold text-xl">1m ➝ 6m</span>
+                                    </div>
+                                    <div class="bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-center">
+                                        <span class="block text-xs uppercase text-slate-400 font-bold mb-1">Manchester</span>
+                                        <span class="text-slate-900 font-extrabold text-xl">75k ➝ 351k</span>
+                                    </div>
+                                </div>
+
+                                <h4 class="font-bold text-blue-800 mb-3 text-xl">Living Conditions</h4>
+                                <p class="mb-4">Urbanization brought overcrowding, poor sanitation, and disease. Working-class neighborhoods were often:</p>
+                                <ul class="mem-list space-y-2 mb-6 marker:text-blue-500">
+                                    <li>Densely packed slums with inadequate housing.</li>
+                                    <li>Polluted by coal-burning factories and open sewage.</li>
+                                    <li>Vulnerable to epidemics (Cholera, Typhoid).</li>
+                                </ul>
+
+                                <p class="text-sm bg-blue-50 p-4 rounded-xl text-blue-900">
+                                    <strong>Reformers:</strong> Women like <strong>Octavia Hill</strong> and <strong>Josephine Butler</strong> campaigned for better housing and public health.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-blue-500 border-4 border-blue-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-city text-xl"></i>
+                </div>
+
+                <div class="hidden md:block text-left md:order-2">
+                     <span class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-2 block">Society</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Rapid<br>Urbanization</h3>
+                </div>
+            </div>
+
+            <!-- Card 7: Social Impact -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="hidden md:block text-right">
+                    <span class="text-green-600 font-bold text-xs uppercase tracking-widest mb-2 block">Culture</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Social & Cultural<br>Impact</h3>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+
+                <div class="pl-20 md:pl-0">
+                    <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Social Impact</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Class, Education & Literacy
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-green-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-green-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <div class="mb-8">
+                                    <h4 class="font-bold text-green-800 mb-4 text-xl">Class Restructuring</h4>
+                                    <ul class="space-y-3">
+                                        <li class="pl-4 border-l-4 border-green-200">
+                                            <strong class="text-green-900 block">New Middle Class</strong> Emerged from merchants, professionals, and factory owners.
+                                        </li>
+                                        <li class="pl-4 border-l-4 border-green-200">
+                                            <strong class="text-green-900 block">Working Class</strong> Faced long hours, low wages, and dangerous conditions.
+                                        </li>
+                                        <li class="pl-4 border-l-4 border-green-200">
+                                            <strong class="text-green-900 block">Labor Movements</strong> Trade unions began organizing to demand rights and reforms.
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-green-800 mb-3 text-xl">Education & Literacy</h4>
+                                    <p class="mb-3">The need for skilled labour and civic participation led to expanded education.</p>
+                                    <p class="text-sm font-medium text-slate-800">Result: Literacy rates rose. Newspapers, novels, and public lectures became widespread.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8: Literary Responses -->
+            <div class="timeline-item mb-16 md:grid md:grid-cols-2 md:gap-24 items-center relative">
+                <div class="pl-20 md:pl-0 md:order-1">
+                     <div class="bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden card cursor-pointer group w-full" onclick="toggleCard(this)">
+                        <div class="p-6 md:p-8 flex justify-between items-center border-b border-slate-50">
+                            <div>
+                                <h3 class="md:hidden text-xl font-bold text-slate-900 mb-1">Literary Responses</h3>
+                                <p class="text-sm text-slate-500 font-medium flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Dickens & Engels
+                                </p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-green-50 transition-colors">
+                                <i class="fas fa-chevron-down text-slate-400 group-hover:text-green-500 transform transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                        <div class="card-content max-h-0 overflow-hidden bg-white">
+                            <div class="p-8 text-slate-600 leading-relaxed text-lg study-text">
+                                <div class="mb-8 p-6 bg-slate-50 rounded-2xl">
+                                    <h5 class="font-bold text-slate-900 text-xl mb-3 flex items-center"><i class="fas fa-book mr-3 text-slate-400"></i>Charles Dickens</h5>
+                                    <p class="text-slate-600 mb-4">Vividly criticized industrial society. In <em>Hard Times</em> (1854), he portrays <strong>"Coketown,"</strong> a grim industrial city where <strong>utilitarianism and mechanization suppress imagination and compassion.</strong></p>
+                                    <ul class="mem-list space-y-2 text-sm marker:text-green-500">
+                                        <li><strong>Characters:</strong> Stephen Blackpool (factory worker) and Sissy Jupe (circus girl) represent the human cost.</li>
+                                        <li><strong>Condemned:</strong> Dehumanizing factory life, poor education, and rigid social hierarchies.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="p-6 bg-slate-50 rounded-2xl">
+                                    <h5 class="font-bold text-slate-900 text-xl mb-3 flex items-center"><i class="fas fa-pen-nib mr-3 text-slate-400"></i>Friedrich Engels</h5>
+                                    <p class="text-slate-600 mb-4">In <em>The Condition of the Working Class in England</em> (1845), he offers a sociological critique based on his time in Manchester.</p>
+                                    <ul class="mem-list space-y-2 text-sm marker:text-green-500">
+                                        <li>Describes appalling living conditions, child labor, and exploitation.</li>
+                                        <li>Laid the foundation for <strong>Marxist theory</strong> (industrialization creates class conflict).</li>
+                                        <li>Viewed industrialization as a <strong>human tragedy</strong> provoking resistance.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute left-[24px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-white text-green-500 border-4 border-green-50 shadow-lg z-20 ring-4 ring-white">
+                    <i class="fas fa-feather-alt text-xl"></i>
+                </div>
+
+                <div class="hidden md:block text-left md:order-2">
+                     <span class="text-green-600 font-bold text-xs uppercase tracking-widest mb-2 block">Literature</span>
+                    <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Literary<br>Responses</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: THEMES VIEW -->
+        <div id="themes-view" class="hidden study-text">
+            
+            <div class="text-center mb-12">
+                <span class="text-history-purple font-bold text-sm uppercase tracking-widest mb-2 block">Part 2</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Victorian England</h2>
+                <p class="text-slate-500 mt-2">Values, Reform, Class Structure & Empire</p>
+            </div>
+
+            <!-- Section 1: Victorian Values -->
+            <div class="mb-16">
+                <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-history-purple text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-heart"></i></span>
+                    Victorian Values
+                </h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Morality -->
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                        <h4 class="font-bold text-lg text-slate-900 mb-3">Morality & Duty</h4>
+                        <ul class="mem-list text-sm space-y-2 text-slate-600">
+                            <li>Values rooted in moral rectitude, self-discipline, and social responsibility.</li>
+                            <li><strong>Respectability:</strong> Central to identity. Encompassed modesty, sobriety, and adhering to norms.</li>
+                            <li>A respectable individual was industrious, pious, and family-oriented.</li>
+                        </ul>
+                    </div>
+                    <!-- Gender Roles -->
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                        <h4 class="font-bold text-lg text-slate-900 mb-3">Gender Roles</h4>
+                        <ul class="mem-list text-sm space-y-2 text-slate-600">
+                            <li><strong>Men:</strong> Providers and public figures.</li>
+                            <li><strong>Women:</strong> Idealized as "Angel in the House" (moral guardians of the home).</li>
+                            <li>Sharply defined roles for public vs. private life.</li>
+                        </ul>
+                    </div>
+                    <!-- Religion & Patriotism -->
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                        <h4 class="font-bold text-lg text-slate-900 mb-3">Religion & Progress</h4>
+                        <ul class="mem-list text-sm space-y-2 text-slate-600">
+                            <li><strong>Evangelical Christianity:</strong> Influenced public behavior (Temperance Society, Sabbatarianism).</li>
+                            <li><strong>Patriotism:</strong> British Empire viewed as a "civilizing force".</li>
+                            <li>Industrial success was seen as a moral triumph.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Class Structure (Visual Hierarchy) -->
+            <div class="mb-16">
+                <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-history-gold text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-layer-group"></i></span>
+                    Class Structure
+                </h3>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <!-- Upper Class -->
+                    <div class="bg-gradient-to-r from-yellow-50 to-white p-6 rounded-xl border-l-4 border-yellow-400 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-xl text-yellow-900">Upper Class</h4>
+                                <p class="text-xs uppercase tracking-wide text-yellow-600 font-bold mb-2">Aristocrats, Landed Gentry, Wealthy Industrialists</p>
+                                <ul class="mem-list text-sm text-slate-700">
+                                    <li>Held political power, owned vast estates, inherited titles.</li>
+                                    <li>Children educated privately; sons entered politics/military/clergy; daughters groomed for marriage.</li>
+                                </ul>
+                            </div>
+                            <i class="fas fa-crown text-yellow-200 text-4xl"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Middle Class -->
+                    <div class="bg-gradient-to-r from-blue-50 to-white p-6 rounded-xl border-l-4 border-blue-400 shadow-sm ml-4 md:ml-8">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-xl text-blue-900">Middle Class</h4>
+                                <p class="text-xs uppercase tracking-wide text-blue-600 font-bold mb-2">Merchants, Professionals, Managers</p>
+                                <ul class="mem-list text-sm text-slate-700">
+                                    <li>Grew rapidly due to industrial capitalism.</li>
+                                    <li>Valued education, respectability, and upward mobility.</li>
+                                    <li>Led reform movements.</li>
+                                </ul>
+                            </div>
+                            <i class="fas fa-briefcase text-blue-200 text-4xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Working Class -->
+                    <div class="bg-gradient-to-r from-slate-100 to-white p-6 rounded-xl border-l-4 border-slate-400 shadow-sm ml-8 md:ml-16">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-xl text-slate-900">Working Class</h4>
+                                <p class="text-xs uppercase tracking-wide text-slate-500 font-bold mb-2">Factory Workers, Miners, Servants, Labourers</p>
+                                <ul class="mem-list text-sm text-slate-700">
+                                    <li>Majority of the population.</li>
+                                    <li>Lived in overcrowded housing, long hours, limited healthcare/education.</li>
+                                    <li>Women and children worked to supplement income.</li>
+                                </ul>
+                            </div>
+                            <i class="fas fa-hammer text-slate-200 text-4xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Reform Movements -->
+            <div class="mb-16">
+                <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-history-green text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-leaf"></i></span>
+                    Reform Movements
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border-t-4 border-green-400">
+                        <h4 class="font-bold text-lg text-slate-900 mb-2">Labour & Factory Reform</h4>
+                        <ul class="mem-list text-sm text-slate-600">
+                            <li><strong>Factory Acts (from 1833):</strong> Regulated child labor, limited hours, mandated inspections.</li>
+                            <li><strong>Lord Shaftesbury:</strong> Campaigned for humane conditions for women and children.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border-t-4 border-blue-400">
+                        <h4 class="font-bold text-lg text-slate-900 mb-2">Public Health & Sanitation</h4>
+                        <ul class="mem-list text-sm text-slate-600">
+                            <li><strong>Public Health Act (1848):</strong> Sanitation, clean water, urban planning.</li>
+                            <li><strong>Edwin Chadwick:</strong> Argued disease was rooted in poverty/poor living conditions.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border-t-4 border-yellow-400">
+                        <h4 class="font-bold text-lg text-slate-900 mb-2">Education & Political</h4>
+                        <ul class="mem-list text-sm text-slate-600">
+                            <li><strong>Education Act (1870):</strong> Compulsory schooling (ages 5-13). Tool for moral improvement.</li>
+                            <li><strong>Reform Acts (1832, 67, 84):</strong> Expanded franchise.</li>
+                            <li><strong>Chartist Movement:</strong> Demanded universal male suffrage (failed short term, laid groundwork).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border-t-4 border-purple-400">
+                        <h4 class="font-bold text-lg text-slate-900 mb-2">Women's Rights</h4>
+                        <ul class="mem-list text-sm text-slate-600">
+                            <li>Campaigns for property rights, education, suffrage.</li>
+                            <li><strong>Josephine Butler:</strong> Fought against Contagious Diseases Acts (which targeted women unfairly).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Industrial Cities -->
+            <div class="mb-16">
+                <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-slate-700 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-industry"></i></span>
+                    Industrial Cities Comparison
+                </h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Manchester -->
+                    <div class="bg-slate-800 text-white p-8 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-8 opacity-10">
+                            <i class="fas fa-tshirt text-9xl"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-1">Manchester</h4>
+                        <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-6">"Cottonopolis"</p>
+                        <ul class="space-y-3 relative z-10">
+                            <li class="flex gap-3"><i class="fas fa-check text-green-400 mt-1"></i> Heart of global cotton industry.</li>
+                            <li class="flex gap-3"><i class="fas fa-check text-green-400 mt-1"></i> Driven by steam-powered textile mills.</li>
+                            <li class="flex gap-3"><i class="fas fa-check text-green-400 mt-1"></i> Symbol of progress and inequality (harsh labor).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Birmingham -->
+                    <div class="bg-slate-700 text-white p-8 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-8 opacity-10">
+                            <i class="fas fa-cogs text-9xl"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-1">Birmingham</h4>
+                        <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-6">"Workshop of the World"</p>
+                        <ul class="space-y-3 relative z-10">
+                            <li class="flex gap-3"><i class="fas fa-check text-blue-400 mt-1"></i> Metalworking, small manufacturing, engineering.</li>
+                            <li class="flex gap-3"><i class="fas fa-check text-blue-400 mt-1"></i> Produced "toys" (buttons/pins), bicycles, steam engines.</li>
+                            <li class="flex gap-3"><i class="fas fa-check text-blue-400 mt-1"></i> Pioneered division of labor (complex production chains).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Section 5: Literary Reflections (Part 2 Specific) -->
+            <div class="mb-16">
+                 <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-slate-500 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-feather-alt"></i></span>
+                    Literary Reflections
+                </h3>
+                <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                    <p class="mb-4">Writers captured the moral tensions and class struggles:</p>
+                    <ul class="mem-list">
+                        <li><strong>Charles Dickens:</strong> Criticized industrial society.</li>
+                        <li><strong>Elizabeth Gaskell:</strong> Captured class struggles.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 6: British Empire Intro -->
+            <div class="mb-8">
+                 <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-6 border-b border-slate-200 pb-3">
+                    <span class="bg-red-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-globe"></i></span>
+                    The British Empire (Overview)
+                </h3>
+                <div class="bg-red-50 p-6 rounded-2xl border border-red-100">
+                    <p class="leading-relaxed text-slate-700">
+                        One of the most expansive and influential empires in history. From early mercantile ventures to its height in the 19th century and decline in the 20th, it was marked by complex governance, ideological contradictions, and persistent critiques.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PART 3: Q&A VIEW (Redesigned as Accordion List) -->
+        <div id="qa-view" class="hidden study-text">
+            
+            <div class="text-center mb-12">
+                <span class="text-history-blue font-bold text-sm uppercase tracking-widest mb-2 block">Part 3</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Model Answers</h2>
+                <p class="text-slate-500 mt-2">20 Key Questions for Revision</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+                
+                <!-- Q1 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">01</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Give rise to the Indian Rebellion of 1857</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">The cause was the massive decline of local Indian powers like the Kingdom of Mysore, the Maratha Empire, and the Sikh Empire.</p>
+                            <p>Their dissatisfaction with the British East India Company’s rule led directly to the rebellion. The result was the end of the Company and the start of the British Raj, where India was ruled directly by the British Crown.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">02</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Give rise to the growth of the British Empire</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">The British Empire grew fast in the early 19th century by taking territories in Canada, Australia, South Africa, and India.</p>
+                            <p>Later, it expanded heavily in Africa. By the end of the century, the Empire controlled one-fifth of the world’s land and one-quarter of its population.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">03</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Write on British Indian relationship during the 18 and 19 centuries (6 paragraphs)</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100 space-y-3">
+                            <p>Early on, India was home to the Mughal Empire, one of the "Gunpowder Empires." It had a strong economy and advanced technology.</p>
+                            <p>By the 19th century, remaining Indian powers like the Kingdom of Mysore, the Maratha Empire, and the Sikh Empire suffered a massive decline.</p>
+                            <p>During the Napoleonic Wars, the French had allies in India. When the French were defeated, these Indian allies lost their support, allowing Britain to take control.</p>
+                            <p>Dissatisfaction with the British East India Company grew among the Indian people. This tension caused the outbreak of the Indian Rebellion of 1857.</p>
+                            <p>After the rebellion, the Company was dissolved. The relationship changed as India came under the direct rule of the British Crown, known as the British Raj.</p>
+                            <p>Under the Pax Britannica, India became a key part of the Empire. The British introduced their own legal and education systems to enforce control and economic integration.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">04</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is the role of Octavia Hill and Josephine Butler?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Octavia Hill was a reformer who worked for better housing and public health to help people living in poor slums.</p>
+                            <p>Josephine Butler campaigned for women's rights. She fought against the Contagious Diseases Acts, which treated women unfairly, and she challenged strict Victorian gender rules.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">05</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What did Charles Dickens depict in the Hard Times novel?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">In Hard Times, Dickens criticized industrial society. He described a fictional town called Coketown, which was a grim and dirty city.</p>
+                            <p>He showed how utilitarianism and machines destroyed human imagination. His characters, like the worker Stephen Blackpool, represented the suffering caused by industry.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">06</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What did Charles Dickens do in his own literary works in 1854?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">In 1854, Dickens published Hard Times. In this book, he attacked the bad effects of factory life, poor education, and the gap between social classes.</p>
+                            <p>He used his writing to show how the focus on profit and facts in places like Coketown was crushing human kindness.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">07</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is meant by Marxist theory?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Marxist theory is a political idea arguing that industrialization created class conflict and inequality.</p>
+                            <p>It comes from the work of Friedrich Engels, specifically his book The Condition of the Working Class in England, which described how workers were exploited by capitalism.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">08</span>
+                            <h4 class="font-bold text-slate-800 text-lg">How can we describe the Victorian age?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">The Victorian age (1837–1901) was a time of great transformation under Queen Victoria.</p>
+                            <p>It was defined by industrial expansion, imperial dominance, and social upheaval. While there was progress, there were also strict moral values and a rigid class structure.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">09</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is meant by Princely states?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p>Princely states were semi-independent regions in India, such as the state of the Nizam of Hyderabad.</p>
+                            <p class="mt-2">During the 19th century, these states declined in power alongside other empires like the Sikhs and Marathas, eventually falling under British control.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">10</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is meant by Evangelical Christianity?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Evangelical Christianity was a religious belief that deeply influenced public behavior in the Victorian era.</p>
+                            <p>It tried to make society follow Christian ethics. This led to movements like the Temperance Society, which discouraged drinking alcohol.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q11 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">11</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is meant by Reformers?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Reformers were people who wanted to fix the problems caused by progress, like disease and unfair labor.</p>
+                            <p>Important reformers included Lord Shaftesbury (factories), Edwin Chadwick (sanitation), and Josephine Butler (women's rights). They fought for laws to improve life for the poor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">12</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Write in detail on Defeat of Napoleon in 1815 (6 paragraphs)</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100 space-y-3">
+                            <p>The defeat of the French Empire in the Napoleonic Wars was a turning point. It ended French dominance in Europe.</p>
+                            <p>After this, the British and Russian empires became the world’s leading powers.</p>
+                            <p>The Russian Empire used this chance to expand into the Caucasus and Asia.</p>
+                            <p>For Britain, defeating Napoleon meant defeating his Indian allies (like Mysore). This secured British power in India without French interference.</p>
+                            <p>The end of the war started the Pax Britannica (British Peace), a period of global stability led by Britain.</p>
+                            <p>During this time, Britain used its Naval Supremacy to enforce global trade and economic integration.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q13 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">13</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Describe the literary movement during the 19 and 20 centuries</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Writers during this time responded to the problems of industrialization. They captured the moral tensions of society.</p>
+                            <p>Charles Dickens wrote novels to criticize the loss of humanity in factories. Friedrich Engels wrote non-fiction about the bad conditions of the working class. Also, more people learned to read, so newspapers became very popular.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q14 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">14</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What are the main types of social reform introduced by Queen Victoria?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <ul class="space-y-2 mem-list">
+                                <li><strong>Labour Reform:</strong> The Factory Acts limited working hours and stopped child labor abuse.</li>
+                                <li><strong>Public Health Reform:</strong> The Public Health Act of 1848 built sanitation systems and provided clean water.</li>
+                                <li><strong>Education Reform:</strong> The Act of 1870 made school compulsory for children aged 5–13.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">15</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Discuss two religious movements in English society</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <ul class="space-y-2 mem-list">
+                                <li><strong>The Temperance Society:</strong> Influenced by religion, this group told people to stop drinking alcohol to be more moral.</li>
+                                <li><strong>Sabbatarianism:</strong> This movement insisted that Sunday (the Sabbath) must be strictly kept as a day of rest and religion.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q16 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">16</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is the main role of men and women?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2"><strong>Men:</strong> They were expected to be providers and work in public.</p>
+                            <p><strong>Women:</strong> They were seen as the "angel in the house." Their role was to stay home and be the moral guardians of the family.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q17 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">17</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Discuss the main reform movement which took place during the Victorian era</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <ul class="space-y-2 mem-list">
+                                <li><strong>Chartist Movement:</strong> Demanded voting rights for men.</li>
+                                <li><strong>Factory Reform:</strong> Lord Shaftesbury fought for safer working conditions.</li>
+                                <li><strong>Sanitation Reform:</strong> Edwin Chadwick fought for clean water and sewers in slums.</li>
+                                <li><strong>Women's Rights:</strong> Early feminists fought for education and property laws.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q18 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">18</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What are the three main Victorian values?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <ul class="space-y-2 mem-list">
+                                <li><strong>Morality:</strong> Being religiously good and following Christian ethics.</li>
+                                <li><strong>Duty:</strong> Having self-discipline and responsibility toward society.</li>
+                                <li><strong>Respectability:</strong> Being modest, sober, and hard-working.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q19 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">19</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Describe these literary works' impact on the life/society</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="text-slate-600 text-sm mb-2">These works exposed how hard life was for the poor.</p>
+                            <ul class="space-y-2 mem-list">
+                                <li><strong>Dickens:</strong> Showed the dehumanizing effects of factories, making people feel sympathy for workers.</li>
+                                <li><strong>Engels:</strong> His book laid the groundwork for Marxist theory by explaining class conflict.</li>
+                                <li><strong>General Impact:</strong> Because literacy rose, these books helped people understand the need for social reform.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q20 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer hover:border-history-blue transition-colors group card" onclick="toggleCard(this)">
+                    <div class="p-5 flex justify-between items-start gap-4 bg-slate-50 group-hover:bg-blue-50/50 transition-colors">
+                        <div class="flex gap-4">
+                            <span class="text-history-blue font-bold text-lg min-w-[24px]">20</span>
+                            <h4 class="font-bold text-slate-800 text-lg">What is meant by Respectability?</h4>
+                        </div>
+                        <i class="fas fa-chevron-down text-slate-400 mt-1 transition-transform duration-300"></i>
+                    </div>
+                    <div class="card-content max-h-0 overflow-hidden bg-white">
+                        <div class="p-6 text-slate-600 leading-relaxed border-t border-slate-100">
+                            <p class="mb-2">Respectability was central to Victorian identity. It meant being modest, sober, and following rules.</p>
+                            <p>To be respectable, a person had to be hard-working, religious, and focused on family. This was the standard set by the middle and upper classes.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Toggle Accordion
+        function toggleCard(card) {
+            const content = card.querySelector('.card-content');
+            const icon = card.querySelector('.fa-chevron-down');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.classList.remove('rotate-180');
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        // View Switcher Logic
+        function switchView(viewName) {
+            const timelineView = document.getElementById('timeline-view');
+            const themesView = document.getElementById('themes-view');
+            const qaView = document.getElementById('qa-view');
+            
+            const btnTimeline = document.getElementById('btn-timeline');
+            const btnThemes = document.getElementById('btn-themes');
+            const btnQa = document.getElementById('btn-qa');
+
+            // Reset all classes
+            [timelineView, themesView, qaView].forEach(el => el.classList.add('hidden'));
+            [btnTimeline, btnThemes, btnQa].forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+
+            // Activate selected view
+            if (viewName === 'timeline') {
+                timelineView.classList.remove('hidden');
+                btnTimeline.classList.add('tab-active');
+                btnTimeline.classList.remove('tab-inactive');
+            } else if (viewName === 'themes') {
+                themesView.classList.remove('hidden');
+                btnThemes.classList.add('tab-active');
+                btnThemes.classList.remove('tab-inactive');
+            } else if (viewName === 'qa') {
+                qaView.classList.remove('hidden');
+                btnQa.classList.add('tab-active');
+                btnQa.classList.remove('tab-inactive');
+            }
+        }
+    </script>
+</body>
+</html>
